@@ -45,7 +45,7 @@ text_feature_columns = ['artist', 'title', 'album_genre']
 # Tokenize and pad the text data with the adjusted parameters
 tokenizer = Tokenizer()
 max_sequence_length = 20  # Adjusted sequence length
-vocab_size = 5000  # Adjusted vocabulary size
+vocab_size = 7000  # Adjusted vocabulary size
 embedding_dim = 50  # Adjusted embedding dimension
 
 input_layers = []
