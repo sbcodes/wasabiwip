@@ -74,7 +74,7 @@ for column in text_feature_columns:
 merged = keras.layers.concatenate(embedding_layers)
 
 # Define a Keras model with more complexity
-model = SequentialFeatureSelector()
+model = keras.models.Sequential()
 model.add(merged)
 model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))  # Use Dropout
