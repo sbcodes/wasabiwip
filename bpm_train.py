@@ -8,6 +8,7 @@ from keras.models import Model
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import os
+import joblib
 
 def load_songs(filename, nrows=None):
         return pd.read_csv(filename, sep='\t', nrows=nrows)
@@ -39,6 +40,7 @@ y = clean_df['bpm']  # Target
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+joblib.dump(X_train, "train.pkl")
 print('test data split')
 # Define the text feature columns
 text_feature_columns = ['artist', 'title', 'album_genre']
@@ -79,8 +81,6 @@ model.add(Dropout(0.5))  # Use Dropout
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
 model.add(Dense(1, activation='linear'))
-
-model = Model(inputs=input_layers, outputs=output)
 
 # Compile and fit the model
 model.compile(loss='mean_squared_error', optimizer='adam')
