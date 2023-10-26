@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
 import keras
+from sklearn.feature_selection import SequentialFeatureSelector
 from sklearn.model_selection import train_test_split
-from keras.layers import Embedding, Dense, Flatten, Input
+from keras.layers import Embedding, Dense, Flatten, Input, LSTM, Dropout
 from keras.models import Model
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
@@ -25,7 +26,7 @@ def random_key_from_dict(dictionary, seed=123):
         return keys_list[random_index]
 
 # Load a subset of the data
-df = load_songs('wasabi_songs.csv', nrows=30000)
+df = load_songs('wasabi_songs.csv', nrows=50000)
 print('songs loaded')
 # Remove rows with missing values
 clean_df = df[['artist', 'title', 'album_genre', 'bpm']].dropna()
@@ -44,7 +45,7 @@ text_feature_columns = ['artist', 'title', 'album_genre']
 
 # Tokenize and pad the text data with the adjusted parameters
 tokenizer = Tokenizer()
-max_sequence_length = 20  # Adjusted sequence length
+max_sequence_length = 40  # Adjusted sequence length
 vocab_size = 7000  # Adjusted vocabulary size
 embedding_dim = 50  # Adjusted embedding dimension
 
@@ -71,10 +72,13 @@ for column in text_feature_columns:
 merged = keras.layers.concatenate(embedding_layers)
 
 # Define a Keras model with more complexity
-x = Dense(128, activation='relu')(merged)
-x = Dense(64, activation='relu')(x)
-x = Dense(32, activation='relu')(x)
-output = Dense(1, activation='linear')(x)
+model = SequentialFeatureSelector()
+model.add(merged)
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.5))  # Use Dropout
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(1, activation='linear'))
 
 model = Model(inputs=input_layers, outputs=output)
 
