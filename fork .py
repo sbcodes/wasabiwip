@@ -2,9 +2,12 @@ import keras
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
+import pandas as pd
+
+X_train = pd.read_pickle('train.pkl')
 
 # Assuming you have a model file named 'my_model.h5' in your current directory
-model = keras.models.load_model('my_model.h5')
+model = keras.models.load_model('initial_model_.keras')
 
 # Define the text feature columns
 text_feature_columns = ['title']
